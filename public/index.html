@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Carnets Hospital - Evolis CR80</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { margin: 0; padding: 20px; background-color: #f0f2f5; display: flex; gap: 20px; }
+        .panel { background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .panel-controles { width: 380px; display: flex; flex-direction: column; gap: 14px; }
+        h2 { margin-top: 0; color: #1e293b; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        label { font-weight: 600; font-size: 13px; color: #475569; }
+        input[type="text"], select, input[type="file"] { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        .btn { padding: 10px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn-primary { background: #0284c7; color: white; }
+        .btn-primary:hover { background: #0369a1; }
+        .btn-success { background: #16a34a; color: white; margin-top: 10px; }
+        .btn-success:hover { background: #15803d; }
+        .estado-excel { font-size: 12px; color: #059669; font-weight: bold; }
+        .vista-previa-contenedor { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; }
+        /* Dimensiones relativas para vista previa en pantalla */
+        canvas { border: 1px solid #94a3b8; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); max-height: 550px; width: auto; }
+        
+        /* Estilos específicos para impresión directa */
+        @media print {
+            body * { visibility: hidden; }
+            #canvasCarnet, #canvasCarnet * { visibility: visible; }
+            #canvasCarnet { position: absolute; left: 0; top: 0; width: 100%; height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="panel panel-controles">
+        <h2>Control del Carnet</h2>
+
+        <div>
+            <label for="excelFile">1. Cargar Base de Datos (Excel):</label>
+            <input type="file" id="excelFile" accept=".xlsx, .xls, .csv">
+            <span id="estadoExcel" class="estado-excel"></span>
+        </div>
+
+        <div>
+            <label for="selectPlantilla">2. Seleccionar Plantilla:</label>
+            <input type="file" id="selectPlantilla" accept="image/png, image/jpeg">
+        </div>
+
+        <div>
+            <label for="inputFoto">3. Seleccionar Foto (Ej: 12345678.jpg):</label>
+            <input type="file" id="inputFoto" accept="image/*">
+        </div>
+
+        <hr style="width: 100%; border: 0; border-top: 1px solid #e2e8f0;">
+
+        <div>
+            <label for="inputCedula">Cédula / ID:</label>
+            <input type="text" id="inputCedula" placeholder="Ej: 12345678">
+        </div>
+
+        <div>
+            <label for="inputNombre">Nombre Completo:</label>
+            <input type="text" id="inputNombre" placeholder="Ej: Juan Pérez">
+        </div>
+
+        <div>
+            <label for="inputCargo">Cargo:</label>
+            <input type="text" id="inputCargo" placeholder="Ej: Médico Especialista">
+        </div>
+
+        <div>
+            <label for="inputDepto">Departamento / Área:</label>
+            <input type="text" id="inputDepto" placeholder="Ej: Pediatría">
+        </div>
+
+        <button id="btnImprimir" class="btn btn-success">Imprimir / Exportar Carnet</button>
+    </div>
+
+    <div class="panel vista-previa-contenedor">
+        <h2>Vista Previa (CR80 - 300 DPI)</h2>
+        <!-- Resolución exacta nativa de Evolis vertical: 638 x 1012 px -->
+        <canvas id="canvasCarnet" width="638" height="1012"></canvas>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
